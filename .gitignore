@@ -32,6 +32,7 @@ htmlcov/
 *.html
 *.json
 !tests/*.json
+!.vscode/*.json
 
 # Docker
 .dockerignore
