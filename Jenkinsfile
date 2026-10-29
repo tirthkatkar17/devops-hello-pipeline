@@ -5,13 +5,15 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Stage 1: Checkout source code from repository'
+                checkout scm
             }
         }
 
         stage('Pytest Execution') {
             steps {
-                echo 'Stage 2: Running Pytest and printing test case...'
-                bat 'pytest -v -s'
+                echo 'Stage 2: Installing requirements and running Pytest...'
+                bat 'python -m pip install --upgrade pip pytest'
+                bat 'python -m pytest -v -s'
             }
         }
 
@@ -27,14 +29,18 @@ pipeline {
         stage('Evidently Monitoring') {
             steps {
                 echo 'Stage 5: Running Evidently tool and generating monitoring report...'
-                bat 'python monitor.py'
+                // Added a timeout so it fails gracefully instead of hanging for 10+ minutes
+                timeout(time: 3, unit: 'MINUTES') {
+                    bat 'python -m pip install evidently'
+                    bat 'python monitor.py'
+                }
             }
         }
     }
 
     post {
         always {
-            echo 'Pipeline completed successfully.'
+            echo 'Pipeline execution finished.'
         }
     }
 }
