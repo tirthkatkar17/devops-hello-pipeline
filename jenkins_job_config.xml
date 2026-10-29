@@ -1,0 +1,66 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>DevOps End-to-End Pipeline: Hello.py, Docker, Pytest, Evidently AI</description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>https://github.com/tirthkatkar17/devops-hello-pipeline.git</url>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>*/main</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="empty-list"/>
+    <extensions/>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.BatchFile>
+      <command>set PATH=C:\Python313;C:\Python313\Scripts;C:\Users\tirth\AppData\Roaming\Python\Python313\Scripts;%PATH%&#xd;
+set PYTHONPATH=C:\Users\tirth\AppData\Roaming\Python\Python313\site-packages;C:\Python313\Lib\site-packages&#xd;
+set DO_NOT_TRACK=1&#xd;
+set EVIDENTLY_DISABLE_TELEMETRY=1&#xd;
+&#xd;
+echo ========================================================&#xd;
+echo STEP 5: PULL CODE FROM GITHUB (Handled by Git SCM)&#xd;
+echo ========================================================&#xd;
+git status&#xd;
+git log -1&#xd;
+&#xd;
+echo ========================================================&#xd;
+echo STEP 10: CONFIGURE PYTEST AND PRINT 1 TEST CASE&#xd;
+echo ========================================================&#xd;
+pytest -v -s&#xd;
+&#xd;
+echo ========================================================&#xd;
+echo STEP 8 and 9: LIGHTWEIGHT DOCKER IMAGE and ADD HELLO.PY TO DOCKER&#xd;
+echo ========================================================&#xd;
+docker build -t hello-python:latest .&#xd;
+docker run --rm hello-python:latest&#xd;
+&#xd;
+echo ========================================================&#xd;
+echo STEP 11: CONFIGURE EVIDENTLY TOOL and MONITOR&#xd;
+echo ========================================================&#xd;
+python -u monitor.py&#xd;
+&#xd;
+echo ========================================================&#xd;
+echo ALL STEPS COMPLETED SUCCESSFULLY!&#xd;
+echo ========================================================</command>
+      <configuredLocalRules/>
+    </hudson.tasks.BatchFile>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>

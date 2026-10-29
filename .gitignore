@@ -34,5 +34,8 @@ htmlcov/
 !tests/*.json
 !.vscode/*.json
 
+# Jenkins CLI
+*.jar
+
 # Docker
 .dockerignore
